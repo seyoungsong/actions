@@ -32,8 +32,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: .docker/base/Dockerfile.arm64
+          context: neko
+          file: Dockerfile.base
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -58,8 +58,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           build-args: BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:base
-          context: .docker/chromium
-          file: .docker/chromium/Dockerfile.arm
+          context: neko/.docker/chromium
+          file: neko/.docker/chromium/Dockerfile.arm
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
