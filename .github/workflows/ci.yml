@@ -1,0 +1,67 @@
+name: ci
+
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+# https://github.com/marketplace/actions/build-and-push-docker-images#path-context
+# https://docs.docker.com/build/ci/github-actions/examples/
+
+on:
+  push:
+  schedule:
+    - cron: "0 0 * * 0" # At 00:00 on Sunday.
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: neko
+
+jobs:
+  build-base:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: .docker/base/Dockerfile.arm64
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:base
+  build-chromium:
+    runs-on: ubuntu-latest
+    needs: build-base
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          build-args: BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:base
+          context: .docker/chromium
+          file: .docker/chromium/Dockerfile.arm
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:chromium
+            ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
