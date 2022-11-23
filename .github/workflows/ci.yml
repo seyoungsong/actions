@@ -5,7 +5,7 @@ name: ci
 # https://docs.docker.com/build/ci/github-actions/examples/
 
 on:
-  push:
+  # push:
   schedule:
     - cron: "0 0 * * 0" # At 00:00 on Sunday.
   workflow_dispatch:
