@@ -46,7 +46,7 @@ jobs:
       - name: Checkout Neko
         uses: actions/checkout@v3
         with:
-          repository: https://github.com/m1k1o/neko
+          repository: m1k1o/neko
           path: neko
       - name: ls neko
         run: |
