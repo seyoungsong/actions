@@ -18,7 +18,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Checkout External Repository
+        uses: actions/checkout@v3
         with:
+          path: neko
+          repository: m1k1o/neko
           submodules: recursive
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
