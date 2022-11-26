@@ -1,5 +1,5 @@
 # docker run -it --rm ubuntu:xenial bash
-# docker run -it --rm --privileged seyoungsong/goldendict bash
+# docker run -it --rm --privileged -e DISPLAY=host.docker.internal:0 seyoungsong/goldendict bash
 FROM ubuntu:xenial
 
 # apt
@@ -11,6 +11,7 @@ RUN apt-get update -y && \
     ca-certificates \
     cmake \
     doxygen \
+    file \
     fuse \
     git \
     libao-dev \
@@ -46,3 +47,8 @@ RUN apt-get update -y && \
     # cleanup
     && \
     rm -rf /var/lib/apt/lists/*
+
+# linuxdeployqt-continuous-x86_64.AppImage
+RUN wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" && \
+    chmod a+x linuxdeployqt-continuous-x86_64.AppImage && \
+    mv linuxdeployqt-continuous-x86_64.AppImage /usr/local/bin
