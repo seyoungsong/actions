@@ -14,23 +14,31 @@ jobs:
       - name: Checkout External Repository
         uses: actions/checkout@v3
         with:
-          repository: goldendict/goldendict
-      - name: Update
-        run: |
-          softwareupdate --all --install --force
-          sudo xcode-select --print-path
-          sudo xcode-select --switch /Library/Developer/CommandLineTools
+          repository: goldendict/goldendict # https://github.com/goldendict/goldendict
+      #- name: Update
+      #  run: |
+      #    # softwareupdate --all --install --force
+      #    # sudo xcode-select --print-path
+      #    sudo xcode-select --switch /Library/Developer/CommandLineTools
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v3 # https://github.com/jurplel/install-qt-action
         with:
           version: "5.15.2" # Default
-          modules: "qtwebengine qtwebkit"
+          modules: "qtwebengine"
           setup-python: "false"
           # py7zrversion: "==0.18.1"
+      - name: Build QtWebKit
+        run: |
+          pwd
+          ls -hal /Users/runner/work/actions/Qt
+          tree /Users/runner/work/actions/Qt
+          brew install conan
+          git clone --depth=1 https://github.com/qtwebkit/qtwebkit qtwebkit
+          ./qtwebkit/Tools/qt/build-qtwebkit-conan.py --qt=/Users/runner/work/actions/Qt --install
       - name: Build
         run: |
           brew uninstall opencc hunspell ffmpeg@5 ffmpeg@4 libtiff xz lzo libogg libvorbis zstd || true
