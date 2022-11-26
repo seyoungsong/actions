@@ -28,3 +28,4 @@ linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop
 ## move artifacts to dir
 mkdir -p /artifact
 mv GoldenDict*.AppImage* /artifact
+ls -hal /artifact
