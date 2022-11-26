@@ -11,7 +11,7 @@ jobs:
     name: Build
     runs-on: macos-11
     steps:
-      - name: Checkout External Repository
+      - name: Checkout (goldendict)
         uses: actions/checkout@v3
         with:
           repository: goldendict/goldendict # https://github.com/goldendict/goldendict
@@ -22,16 +22,18 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3 # https://github.com/jurplel/install-qt-action
         with:
-          version: "5.15.2" # Default
+          version: "5.14.1"
           modules: "qtwebengine"
           setup-python: "false"
-          # py7zrversion: "==0.18.1"
+      - name: Checkout (qtwebkit)
+        uses: actions/checkout@v3
+        with:
+          repository: qtwebkit/qtwebkit # https://github.com/qtwebkit/qtwebkit
+          path: qtwebkit
       - name: Build QtWebKit # https://github.com/qtwebkit/qtwebkit/wiki/Building-QtWebKit-on-macOS#building
         run: |
-          ls -hal /Users/runner/work/actions/Qt/5.15.2/
           python3 -m pip install conan
-          git clone --depth=1 https://github.com/qtwebkit/qtwebkit qtwebkit
-          ./qtwebkit/Tools/qt/build-qtwebkit-conan.py --qt=/Users/runner/work/actions/Qt/5.15.2/clang_64 --install
+          ./qtwebkit/Tools/qt/build-qtwebkit-conan.py --qt=${{ github.workspace }}/Qt/5.14.1/clang_64 --install
       - name: Build
         run: |
           brew uninstall opencc hunspell ffmpeg@5 ffmpeg@4 libtiff xz lzo libogg libvorbis zstd || true

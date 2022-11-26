@@ -1,4 +1,4 @@
-# Actions
+# [Actions](https://github.com/seyoungsong/actions/actions)
 
 - [![app](https://github.com/seyoungsong/actions/actions/workflows/app.yml/badge.svg)](https://github.com/seyoungsong/actions/actions/workflows/app.yml)
   - goldendict
