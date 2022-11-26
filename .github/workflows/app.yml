@@ -30,25 +30,3 @@ jobs:
           name: "GoldenDict Linux AppImage (Continuous Build)"
           tag_name: GoldenDict-Linux
           files: /artifact/GoldenDict*.AppImage
-  test-build-neko-image:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: ls neko
-        run: |
-          ls -hal neko/
-          ls -hal
-      - name: rm neko
-        run: |
-          rm -rf neko/
-          ls -hal
-      - name: Checkout Neko
-        uses: actions/checkout@v3
-        with:
-          repository: m1k1o/neko
-          path: neko
-      - name: ls neko
-        run: |
-          ls -hal neko/
-          ls -hal
