@@ -25,3 +25,10 @@ jobs:
           name: GoldenDict.AppImage
           path: /artifact/GoldenDict*.AppImage # GoldenDict-5034348-x86_64.AppImage
           if-no-files-found: error
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "Continuous build: GoldenDict Linux AppImage"
+          tag_name: GoldenDict
+          files: |
+            /artifact/GoldenDict*.AppImage
