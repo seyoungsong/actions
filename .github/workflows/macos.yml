@@ -3,6 +3,7 @@ name: macos
 # From: https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos.yml
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
@@ -14,12 +15,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: goldendict/goldendict
-      - name: Test
-        run: |
-          echo "pwd"
-          pwd
-          echo "ls -hal"
-          ls -hal
       - name: Update
         run: |
           softwareupdate --all --install --force
@@ -33,17 +28,17 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           version: "5.15.2" # Default
-          modules: "qtwebengine"
+          modules: "qtwebengine qtwebkit"
           setup-python: "false"
           # py7zrversion: "==0.18.1"
       - name: Build
         run: |
           brew uninstall opencc hunspell ffmpeg@5 ffmpeg@4 libtiff xz lzo libogg libvorbis zstd || true
-          brew install create-dmg
           qmake CONFIG+=release CONFIG+=no_extra_tiff_handler CONFIG+=zim_support goldendict.pro
           make -j$(nproc)
       - name: Package
         run: |
+          brew install create-dmg
           macdeployqt GoldenDict.app -qmldir=. -verbose=1
           codesign --force --deep -s - GoldenDict.app
           otool -L GoldenDict.app/Contents/MacOS/GoldenDict
