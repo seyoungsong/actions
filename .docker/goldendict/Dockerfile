@@ -6,12 +6,37 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y && \
     apt-get upgrade -y && \
     apt-get install -y -qq --no-install-recommends \
-    git pkg-config build-essential qt5-qmake \
-    libvorbis-dev zlib1g-dev libhunspell-dev x11proto-record-dev \
-    qtdeclarative5-dev libqtwebkit-dev libxtst-dev liblzo2-dev libbz2-dev \
-    libao-dev libavutil-dev libavformat-dev libswresample-dev libtiff5-dev libeb16-dev \
-    libqt5webkit5-dev libqt5svg5-dev libqt5x11extras5-dev qttools5-dev \
-    qttools5-dev-tools qtmultimedia5-dev libqt5multimedia5-plugins libopencc-dev liblzma-dev libzstd1-dev doxygen cmake \
+    build-essential \
+    cmake \
+    doxygen \
+    git \
+    libao-dev \
+    libavformat-dev \
+    libavutil-dev \
+    libbz2-dev \
+    libeb16-dev \
+    libhunspell-dev \
+    liblzma-dev \
+    liblzo2-dev \
+    libopencc-dev \
+    libqt5multimedia5-plugins \
+    libqt5svg5-dev \
+    libqt5webkit5-dev \
+    libqt5x11extras5-dev \
+    libqtwebkit-dev \
+    libswresample-dev \
+    libtiff5-dev \
+    libvorbis-dev \
+    libxtst-dev \
+    libzstd1-dev \
+    pkg-config \
+    qt5-qmake \
+    qtdeclarative5-dev \
+    qtmultimedia5-dev \
+    qttools5-dev \
+    qttools5-dev-tools \
+    x11proto-record-dev \
+    zlib1g-dev \
     # cleanup
     && \
     rm -rf /var/lib/apt/lists/*
