@@ -1,4 +1,5 @@
 # docker run -it --rm ubuntu:xenial bash
+# docker run -it --rm seyoungsong/goldendict bash
 FROM ubuntu:xenial
 
 # apt
@@ -37,6 +38,16 @@ RUN apt-get update -y && \
     qttools5-dev-tools \
     x11proto-record-dev \
     zlib1g-dev \
+    # cleanup
+    && \
+    rm -rf /var/lib/apt/lists/*
+
+# extra
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
+    apt-get install -y -qq --no-install-recommends \
+    ca-certificates \
+    qt5-default \
     # cleanup
     && \
     rm -rf /var/lib/apt/lists/*
