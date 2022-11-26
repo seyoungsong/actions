@@ -35,6 +35,7 @@ jobs:
         run: |
           pwd
           ls -hal /Users/runner/work/actions/Qt
+          brew install tree
           tree /Users/runner/work/actions/Qt
           brew install conan
           git clone --depth=1 https://github.com/qtwebkit/qtwebkit qtwebkit
