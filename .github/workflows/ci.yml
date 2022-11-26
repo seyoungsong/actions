@@ -107,7 +107,7 @@ jobs:
           submodules: recursive
       - name: Build
         run: |
-          docker run -it --rm --privileged --workdir=/src -v /artifact:/artifact ghcr.io/seyoungsong/goldendict /bin/bash < .docker/goldendict/build.sh
+          docker run -i --rm --privileged --workdir=/src -v /artifact:/artifact ghcr.io/seyoungsong/goldendict /bin/bash < .docker/goldendict/build.sh
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
