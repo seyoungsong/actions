@@ -32,52 +32,23 @@ jobs:
           files: /artifact/GoldenDict*.AppImage
   test-build-neko-image:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: neko
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: ls neko
+        run: |
+          ls -hal neko/
+          ls -hal
+      - name: rm neko
+        run: |
+          rm -rf neko/
+          ls -hal
+      - name: Checkout Neko
+        uses: actions/checkout@v3
         with:
-          submodules: recursive
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push (base)
-        uses: docker/build-push-action@v3
-        with:
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          context: neko
-          file: .docker/neko/base/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:base
-            ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:base
-      - name: Build and push (chromium)
-        uses: docker/build-push-action@v3
-        with:
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:base
-          context: .docker/neko/chromium
-          file: .docker/neko/chromium/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:chromium
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-            ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:chromium
-            ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
+          repository: https://github.com/m1k1o/neko
+          path: neko
+      - name: ls neko
+        run: |
+          ls -hal neko/
+          ls -hal
