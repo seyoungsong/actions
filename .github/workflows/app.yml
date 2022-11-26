@@ -17,8 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build
-        run: |
-          docker run --interactive --privileged -v /artifact:/artifact ghcr.io/seyoungsong/goldendict /bin/bash < .docker/goldendict/build.sh
+        run: docker run --interactive --privileged -v /artifact:/artifact ghcr.io/seyoungsong/goldendict /bin/bash < .docker/goldendict/build.sh
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -28,7 +27,6 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: "Continuous build: GoldenDict Linux AppImage"
-          tag_name: GoldenDict
-          files: |
-            /artifact/GoldenDict*.AppImage
+          name: "GoldenDict Linux AppImage (Continuous Build)"
+          tag_name: GoldenDict-Linux
+          files: /artifact/GoldenDict*.AppImage
