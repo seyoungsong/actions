@@ -22,18 +22,9 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3 # https://github.com/jurplel/install-qt-action
         with:
-          version: "5.14.1"
+          version: "5.5.1"
           modules: "qtwebengine"
           setup-python: "false"
-      - name: Checkout (qtwebkit)
-        uses: actions/checkout@v3
-        with:
-          repository: qtwebkit/qtwebkit # https://github.com/qtwebkit/qtwebkit
-          path: qtwebkit
-      - name: Build QtWebKit # https://github.com/qtwebkit/qtwebkit/wiki/Building-QtWebKit-on-macOS#building
-        run: |
-          python3 -m pip install conan
-          ./qtwebkit/Tools/qt/build-qtwebkit-conan.py --qt=${{ github.workspace }}/Qt/5.14.1/clang_64 --install
       - name: Build
         run: |
           brew uninstall opencc hunspell ffmpeg@5 ffmpeg@4 libtiff xz lzo libogg libvorbis zstd || true
