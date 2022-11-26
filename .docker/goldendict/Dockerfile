@@ -1,5 +1,5 @@
 # docker run -it --rm ubuntu:xenial bash
-# docker run -it --rm seyoungsong/goldendict bash
+# docker run -it --rm --privileged seyoungsong/goldendict bash
 FROM ubuntu:xenial
 
 # apt
@@ -8,14 +8,17 @@ RUN apt-get update -y && \
     apt-get upgrade -y && \
     apt-get install -y -qq --no-install-recommends \
     build-essential \
+    ca-certificates \
     cmake \
     doxygen \
+    fuse \
     git \
     libao-dev \
     libavformat-dev \
     libavutil-dev \
     libbz2-dev \
     libeb16-dev \
+    libfuse2 \
     libhunspell-dev \
     liblzma-dev \
     liblzo2-dev \
@@ -31,23 +34,15 @@ RUN apt-get update -y && \
     libxtst-dev \
     libzstd1-dev \
     pkg-config \
+    qt5-default \
     qt5-qmake \
     qtdeclarative5-dev \
     qtmultimedia5-dev \
     qttools5-dev \
     qttools5-dev-tools \
+    wget \
     x11proto-record-dev \
     zlib1g-dev \
-    # cleanup
-    && \
-    rm -rf /var/lib/apt/lists/*
-
-# extra
-RUN apt-get update -y && \
-    apt-get upgrade -y && \
-    apt-get install -y -qq --no-install-recommends \
-    ca-certificates \
-    qt5-default \
     # cleanup
     && \
     rm -rf /var/lib/apt/lists/*
