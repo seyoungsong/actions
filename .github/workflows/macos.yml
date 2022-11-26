@@ -44,5 +44,4 @@ jobs:
           otool -L GoldenDict.app/Contents/Frameworks/lib*
           mkdir tmp
           mv GoldenDict.app ./tmp
-          # --background "installer_background.png"
           create-dmg --volname "GoldenDict Installer" --volicon "icons/macicon.icns" --window-pos 200 120 --window-size 800 400 --icon-size 100 --icon "GoldenDict.app" 200 190 --hide-extension "GoldenDict.app" --app-drop-link 600 185 --skip-jenkins "GoldenDict.dmg" tmp/
