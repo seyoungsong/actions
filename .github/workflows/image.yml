@@ -1,4 +1,4 @@
-name: ci
+name: image
 
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 # https://github.com/marketplace/actions/build-and-push-docker-images#path-context
