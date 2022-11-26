@@ -15,11 +15,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: goldendict/goldendict # https://github.com/goldendict/goldendict
-      #- name: Update
-      #  run: |
-      #    # softwareupdate --all --install --force
-      #    # sudo xcode-select --print-path
-      #    sudo xcode-select --switch /Library/Developer/CommandLineTools
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -31,15 +26,12 @@ jobs:
           modules: "qtwebengine"
           setup-python: "false"
           # py7zrversion: "==0.18.1"
-      - name: Build QtWebKit
+      - name: Build QtWebKit # https://github.com/qtwebkit/qtwebkit/wiki/Building-QtWebKit-on-macOS#building
         run: |
-          pwd
-          ls -hal /Users/runner/work/actions/Qt
-          brew install tree
-          tree /Users/runner/work/actions/Qt
-          brew install conan
+          ls -hal /Users/runner/work/actions/Qt/5.15.2/
+          python3 -m pip install conan
           git clone --depth=1 https://github.com/qtwebkit/qtwebkit qtwebkit
-          ./qtwebkit/Tools/qt/build-qtwebkit-conan.py --qt=/Users/runner/work/actions/Qt --install
+          ./qtwebkit/Tools/qt/build-qtwebkit-conan.py --qt=/Users/runner/work/actions/Qt/5.15.2/clang_64 --install
       - name: Build
         run: |
           brew uninstall opencc hunspell ffmpeg@5 ffmpeg@4 libtiff xz lzo libogg libvorbis zstd || true
