@@ -24,6 +24,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
+
       - name: Install Qt5 # https://github.com/jurplel/install-qt-action
         if: ${{ matrix.qt_ver == '5.15.2' }}
         uses: jurplel/install-qt-action@v3
@@ -38,12 +39,20 @@ jobs:
           version: ${{ matrix.qt_ver }}
           modules: "qtwebengine qtwebchannel qtpositioning qt5compat qtmultimedia qtimageformats"
           setup-python: "false"
-      - name: Build
+
+      - name: Build with Qt5
+        run: |
+          brew uninstall opencc hunspell ffmpeg@5 ffmpeg@4 libtiff xz lzo libogg libvorbis zstd || true
+          brew install create-dmg
+          qmake CONFIG+=release CONFIG+=zim_support goldendict.pro
+          make -j$(nproc)
+      - name: Build with Qt6
         run: |
           brew uninstall opencc hunspell ffmpeg@5 ffmpeg@4 libtiff xz lzo libogg libvorbis zstd || true
           brew install create-dmg
           qmake CONFIG+=release CONFIG+=zim_support QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" goldendict.pro
           make -j$(nproc)
+
       - name: Package
         run: |
           macdeployqt GoldenDict.app -qmldir=. -verbose=1
