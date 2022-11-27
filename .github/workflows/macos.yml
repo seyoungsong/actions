@@ -46,10 +46,12 @@ jobs:
           brew install create-dmg
 
       - name: Build (Qt5)
+        if: ${{ matrix.qt_ver == '5.15.2' }}
         run: |
           qmake CONFIG+=release CONFIG+=zim_support goldendict.pro
           make -j$(nproc)
       - name: Build (Qt6)
+        if: ${{ matrix.qt_ver != '5.15.2' }}
         run: |
           qmake CONFIG+=release CONFIG+=zim_support QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" goldendict.pro
           make -j$(nproc)
