@@ -1,6 +1,6 @@
 name: macos
 
-# From: https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos.yml
+# From: https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-6.x.yml
 
 on:
   push:
@@ -11,45 +11,21 @@ jobs:
     name: Build
     runs-on: macos-11 # https://github.com/actions/runner-images/blob/main/images/macos/macos-11-Readme.md
     steps:
-      - name: Checkout (goldendict) # https://github.com/goldendict/goldendict
+      - name: Checkout (GoldenDict) # https://github.com/xiaoyifang/goldendict
         uses: actions/checkout@v3
         with:
-          repository: goldendict/goldendict
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
+          repository: xiaoyifang/goldendict
       - name: Install Qt # https://github.com/jurplel/install-qt-action
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: "5.15.2"
-          modules: "qtwebengine"
-          setup-python: "false"
-      - name: Prepare QtWebKit
         run: |
-          which -a python
-          python --version
-          which -a python3
-          python3 --version
-          python3 -m pip install conan
-          brew install conan
-      - name: Checkout (qtwebkit) # https://github.com/qtwebkit/qtwebkit/tree/qtwebkit-stable
-        uses: actions/checkout@v3
-        with:
-          repository: qtwebkit/qtwebkit
-          ref: "qtwebkit-stable"
-          path: qtwebkit
-      - name: Install QtWebKit # https://github.com/qtwebkit/qtwebkit/wiki/Building-QtWebKit-on-macOS#building
-        run: |
-          python3 ./qtwebkit/Tools/qt/build-qtwebkit-conan.py --qt=${{ github.workspace }}/Qt/5.15.2/clang_64 --install
+          brew install qt
       - name: Build
         run: |
           brew uninstall opencc hunspell ffmpeg@5 ffmpeg@4 libtiff xz lzo libogg libvorbis zstd || true
-          qmake CONFIG+=release CONFIG+=no_extra_tiff_handler CONFIG+=zim_support goldendict.pro
+          brew install create-dmg
+          qmake CONFIG+=release CONFIG+=zim_support QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" goldendict.pro
           make -j$(nproc)
       - name: Package
         run: |
-          brew install create-dmg
           macdeployqt GoldenDict.app -qmldir=. -verbose=1
           codesign --force --deep -s - GoldenDict.app
           otool -L GoldenDict.app/Contents/MacOS/GoldenDict
