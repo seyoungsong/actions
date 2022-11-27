@@ -27,7 +27,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: "GoldenDict Linux AppImage (Continuous Build)"
+          name: "GoldenDict Linux (Continuous Build)"
           tag_name: GoldenDict-Linux
           files: /artifact/GoldenDict*.AppImage
   build-macos:
@@ -90,3 +90,15 @@ jobs:
           mkdir tmp
           mv GoldenDict.app ./tmp
           create-dmg --volname "GoldenDict Installer" --volicon "icons/macicon.icns" --window-pos 200 120 --window-size 800 400 --icon-size 100 --icon "GoldenDict.app" 200 190 --hide-extension "GoldenDict.app" --app-drop-link 600 185 --skip-jenkins "GoldenDict.dmg" tmp/
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: GoldenDict.dmg
+          path: GoldenDict.dmg # /Users/runner/work/actions/actions/GoldenDict.dmg
+          if-no-files-found: error
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "GoldenDict macOS (Continuous Build)"
+          tag_name: GoldenDict-macOS
+          files: GoldenDict.dmg
