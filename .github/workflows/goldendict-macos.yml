@@ -1,4 +1,4 @@
-name: macos
+name: goldendict-macos
 
 # From: https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-6.x.yml
 #       https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-PR-check.yml
@@ -12,8 +12,10 @@ jobs:
     name: Build
     strategy:
       matrix:
-        os: [macos-11, macos-12] # https://github.com/actions/runner-images/tree/main/images/macos
-        qt_ver: [5.15.2, 6.4.1] # https://en.wikipedia.org/wiki/Qt_version_history
+        # os: [macos-11, macos-12]
+        # qt_ver: [5.15.2, 6.4.1]
+        os: [macos-12] # https://github.com/actions/runner-images/tree/main/images/macos
+        qt_ver: [6.4.1] # https://en.wikipedia.org/wiki/Qt_version_history
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout (GoldenDict) # https://github.com/xiaoyifang/goldendict
