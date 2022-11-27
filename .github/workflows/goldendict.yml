@@ -19,7 +19,6 @@ jobs:
       - name: Build
         run: |
           docker run --interactive --privileged -v /artifact:/artifact ghcr.io/seyoungsong/goldendict /bin/bash < .docker/goldendict/build.sh
-          mv /artifact/GoldenDict*.AppImage /artifact/GoldenDict.AppImage
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:

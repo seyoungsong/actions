@@ -29,3 +29,4 @@ linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop
 mkdir -p /artifact
 mv GoldenDict*.AppImage* /artifact
 ls -hal /artifact
+mv /artifact/GoldenDict*.AppImage /artifact/GoldenDict.AppImage
