@@ -1,6 +1,7 @@
 name: macos
 
 # From: https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-6.x.yml
+#       https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-PR-check.yml
 
 on:
   push:
@@ -9,15 +10,34 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: macos-11 # https://github.com/actions/runner-images/blob/main/images/macos/macos-11-Readme.md
+    strategy:
+      matrix:
+        os: [macos-11, macos-12] # https://github.com/actions/runner-images/tree/main/images/macos
+        qt_ver: [5.15.2, 6.4.1] # https://en.wikipedia.org/wiki/Qt_version_history
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout (GoldenDict) # https://github.com/xiaoyifang/goldendict
         uses: actions/checkout@v3
         with:
           repository: xiaoyifang/goldendict
-      - name: Install Qt # https://github.com/jurplel/install-qt-action
-        run: |
-          brew install qt
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Install Qt5 # https://github.com/jurplel/install-qt-action
+        if: ${{ matrix.qt_ver == '5.15.2' }}
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt_ver }} # https://github.com/miurahr/aqtinstall
+          modules: "qtwebengine"
+          setup-python: "false"
+      - name: Install Qt6
+        if: ${{ matrix.qt_ver != '5.15.2' }}
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt_ver }}
+          modules: "qtwebengine qtwebchannel qtpositioning qt5compat qtmultimedia qtimageformats"
+          setup-python: "false"
       - name: Build
         run: |
           brew uninstall opencc hunspell ffmpeg@5 ffmpeg@4 libtiff xz lzo libogg libvorbis zstd || true
