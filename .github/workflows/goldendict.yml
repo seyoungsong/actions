@@ -1,4 +1,4 @@
-name: goldendict-macos
+name: goldendict
 
 # From: https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-6.x.yml
 #       https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-PR-check.yml
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-macos:
     name: Build
     strategy:
       matrix:
