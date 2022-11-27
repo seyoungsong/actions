@@ -9,34 +9,39 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: macos-11
+    runs-on: macos-11 # https://github.com/actions/runner-images/blob/main/images/macos/macos-11-Readme.md
     steps:
-      - name: Checkout (goldendict)
+      - name: Checkout (goldendict) # https://github.com/goldendict/goldendict
         uses: actions/checkout@v3
         with:
-          repository: goldendict/goldendict # https://github.com/goldendict/goldendict
-      - name: Prepare QtWebKit
-        run: |
-          brew install conan
+          repository: goldendict/goldendict
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3 # https://github.com/jurplel/install-qt-action
+      - name: Install Qt # https://github.com/jurplel/install-qt-action
+        uses: jurplel/install-qt-action@v3
         with:
           version: "5.15.2"
           modules: "qtwebengine"
           setup-python: "false"
-      - name: Checkout (qtwebkit)
+      - name: Prepare QtWebKit
+        run: |
+          which -a python
+          python --version
+          which -a python3
+          python3 --version
+          python3 -m pip install conan
+          brew install conan
+      - name: Checkout (qtwebkit) # https://github.com/qtwebkit/qtwebkit/tree/qtwebkit-stable
         uses: actions/checkout@v3
         with:
-          repository: qtwebkit/qtwebkit # https://github.com/qtwebkit/qtwebkit/tree/qtwebkit-stable
+          repository: qtwebkit/qtwebkit
           ref: "qtwebkit-stable"
           path: qtwebkit
-      - name: Build QtWebKit # https://github.com/qtwebkit/qtwebkit/wiki/Building-QtWebKit-on-macOS#building
+      - name: Install QtWebKit # https://github.com/qtwebkit/qtwebkit/wiki/Building-QtWebKit-on-macOS#building
         run: |
-          ./qtwebkit/Tools/qt/build-qtwebkit-conan.py --qt=${{ github.workspace }}/Qt/5.15.2/clang_64 --install
+          python3 ./qtwebkit/Tools/qt/build-qtwebkit-conan.py --qt=${{ github.workspace }}/Qt/5.15.2/clang_64 --install
       - name: Build
         run: |
           brew uninstall opencc hunspell ffmpeg@5 ffmpeg@4 libtiff xz lzo libogg libvorbis zstd || true
