@@ -1,15 +1,38 @@
 name: goldendict
 
-# From: https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-6.x.yml
-#       https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-PR-check.yml
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+# https://github.com/marketplace/actions/build-and-push-docker-images#path-context
+# https://docs.docker.com/build/ci/github-actions/examples/
 
 on:
   push:
+  schedule:
+    - cron: "0 0 * * 0" # At 00:00 on Sunday.
   workflow_dispatch:
 
 jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build
+        run: docker run --interactive --privileged -v /artifact:/artifact ghcr.io/seyoungsong/goldendict /bin/bash < .docker/goldendict/build.sh
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: GoldenDict.AppImage
+          path: /artifact/GoldenDict*.AppImage # GoldenDict-5034348-x86_64.AppImage
+          if-no-files-found: error
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "GoldenDict Linux AppImage (Continuous Build)"
+          tag_name: GoldenDict-Linux
+          files: /artifact/GoldenDict*.AppImage
   build-macos:
-    name: Build
+    # From: https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-6.x.yml
+    #       https://github.com/xiaoyifang/goldendict/blob/staged/.github/workflows/macos-PR-check.yml
     strategy:
       matrix:
         # os: [macos-11, macos-12]
